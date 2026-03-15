@@ -1,5 +1,7 @@
-ARG BUILD_FROM=ghcr.io/home-assistant/aarch64-base-debian:bookworm
+ARG BUILD_FROM=ghcr.io/home-assistant/aarch64-base-debian:bullseye
 FROM ${BUILD_FROM}
+
+# Bullseye has Python 3.9 which is compatible with all Coral packages
 
 # Install Python + system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -13,25 +15,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libusb-1.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Add Coral Edge TPU repository — install libedgetpu + tflite from same source
+# Add Coral Edge TPU repository — all packages from same source for compatibility
 RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" \
     > /etc/apt/sources.list.d/coral-edgetpu.list \
     && curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
     libedgetpu1-std \
+    python3-pycoral \
     python3-tflite-runtime \
-    && rm -rf /var/lib/apt/lists/* \
-    || true
-
-# Install tflite-runtime from Coral wheel repo if apt package not available
-RUN python3 -c "import tflite_runtime" 2>/dev/null || \
-    pip install --no-cache-dir --break-system-packages \
-    --extra-index-url https://google-coral.github.io/py-repo/ \
-    tflite-runtime
+    && rm -rf /var/lib/apt/lists/*
 
 # Flask
-RUN pip install --no-cache-dir --break-system-packages flask==3.1.0
+RUN pip install --no-cache-dir flask==3.1.0
 
 WORKDIR /opt/coral-face
 

@@ -2,4 +2,3 @@ flask==3.1.0
 numpy>=1.24,<2.0
 Pillow>=10.0
 tflite-runtime==2.14.0
-pycoral~=2.0

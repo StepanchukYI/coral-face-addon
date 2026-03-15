@@ -19,7 +19,6 @@ RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
     libedgetpu1-std \
-    python3-pycoral \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/coral-face

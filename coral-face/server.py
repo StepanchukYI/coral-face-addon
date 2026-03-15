@@ -83,16 +83,18 @@ def save_faces_db():
 def init_detect_interpreter():
     """Initialize face detection interpreter on Coral TPU."""
     global _detect_interpreter
+    import tflite_runtime.interpreter as tflite
     try:
-        from pycoral.utils.edgetpu import make_interpreter
-        _detect_interpreter = make_interpreter(str(DETECT_MODEL))
+        _detect_interpreter = tflite.Interpreter(
+            model_path=str(DETECT_MODEL),
+            experimental_delegates=[tflite.load_delegate("libedgetpu.so.1")],
+        )
         _detect_interpreter.allocate_tensors()
         log.info("Face detection model loaded on Coral TPU")
         return True
     except Exception as e:
         log.warning(f"Coral TPU not available, falling back to CPU: {e}")
         try:
-            import tflite_runtime.interpreter as tflite
             cpu_model = MODELS_DIR / "ssd_mobilenet_v2_face_quant_postprocess.tflite"
             model_path = str(cpu_model) if cpu_model.exists() else str(DETECT_MODEL)
             _detect_interpreter = tflite.Interpreter(model_path=model_path)

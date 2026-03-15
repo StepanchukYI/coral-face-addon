@@ -1,0 +1,22 @@
+name: Coral Face Recognition
+version: "1.0.0"
+slug: coral_face
+description: Face detection on Coral USB TPU + face recognition via DeepStack-compatible API
+url: https://github.com/StepanchukYI/homelab
+arch:
+  - aarch64
+startup: application
+boot: auto
+ports:
+  5100/tcp: 5100
+ports_description:
+  5100/tcp: DeepStack-compatible REST API
+devices:
+  - /dev/bus/usb
+usb: true
+privileged:
+  - SYS_ADMIN
+map:
+  - addon_config:rw
+options: {}
+schema: {}

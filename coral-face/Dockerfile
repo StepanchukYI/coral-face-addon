@@ -40,7 +40,9 @@ RUN curl -fsSL -o models/mobilefacenet.tflite \
     "https://raw.githubusercontent.com/nicehuster/mobilefacenet-tflite/main/model/mobilefacenet.tflite"
 
 COPY server.py .
+COPY run.sh /
+RUN chmod +x /run.sh
 
 EXPOSE 5100
 
-CMD ["python3", "server.py"]
+CMD ["/run.sh"]

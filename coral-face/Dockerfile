@@ -5,27 +5,35 @@ FROM ${BUILD_FROM}
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
-    python3-dev \
+    python3-numpy \
+    python3-pil \
     curl \
     gnupg \
     ca-certificates \
     libusb-1.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Add Coral Edge TPU repository and install libedgetpu
+# Add Coral Edge TPU repository — install libedgetpu + tflite from same source
 RUN echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" \
     > /etc/apt/sources.list.d/coral-edgetpu.list \
     && curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
     libedgetpu1-std \
-    && rm -rf /var/lib/apt/lists/*
+    python3-tflite-runtime \
+    && rm -rf /var/lib/apt/lists/* \
+    || true
+
+# Install tflite-runtime from Coral wheel repo if apt package not available
+RUN python3 -c "import tflite_runtime" 2>/dev/null || \
+    pip install --no-cache-dir --break-system-packages \
+    --extra-index-url https://google-coral.github.io/py-repo/ \
+    tflite-runtime
+
+# Flask
+RUN pip install --no-cache-dir --break-system-packages flask==3.1.0
 
 WORKDIR /opt/coral-face
-
-# Install Python dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir --break-system-packages -r requirements.txt
 
 # Download face detection model (Coral Edge TPU)
 RUN mkdir -p models && \

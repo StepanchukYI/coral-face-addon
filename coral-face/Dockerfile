@@ -33,10 +33,8 @@ RUN mkdir -p models && \
     "https://github.com/google-coral/test_data/raw/master/ssd_mobilenet_v2_face_quant_postprocess_edgetpu.tflite"
 
 # Download MobileFaceNet embedding model (TFLite CPU)
-RUN curl -fsSL -o models/mobilefacenet.tflite \
-    "https://github.com/nicehuster/mobilefacenet-tflite/raw/main/model/mobilefacenet.tflite" \
-    || curl -fsSL -o models/mobilefacenet.tflite \
-    "https://raw.githubusercontent.com/nicehuster/mobilefacenet-tflite/main/model/mobilefacenet.tflite"
+RUN curl -fsSL -L -o models/mobilefacenet.tflite \
+    "https://github.com/MCarlomagno/FaceRecognitionAuth/raw/master/assets/mobilefacenet.tflite"
 
 COPY server.py .
 COPY run.sh /

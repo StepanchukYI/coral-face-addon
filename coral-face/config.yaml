@@ -1,5 +1,5 @@
 name: Coral Face Recognition
-version: "1.1.0"
+version: "1.1.1"
 slug: coral_face
 description: Face detection on Coral USB TPU + face recognition via DeepStack-compatible API
 url: https://github.com/StepanchukYI/homelab

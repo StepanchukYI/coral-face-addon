@@ -1,8 +1,8 @@
 name: Coral Face Recognition
-version: "1.1.1"
+version: "1.2.0"
 slug: coral_face
 description: Face detection on Coral USB TPU + face recognition via DeepStack-compatible API
-url: https://github.com/StepanchukYI/homelab
+url: https://github.com/StepanchukYI/coral-face-addon
 arch:
   - aarch64
 init: false
@@ -19,5 +19,11 @@ privileged:
   - SYS_ADMIN
 map:
   - addon_config:rw
-options: {}
-schema: {}
+options:
+  detect_threshold: 0.5
+  recognize_threshold: 0.45
+  port: 5100
+schema:
+  detect_threshold: "float(0.1,1.0)"
+  recognize_threshold: "float(0.1,1.0)"
+  port: "port"

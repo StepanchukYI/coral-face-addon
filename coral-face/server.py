@@ -266,7 +266,7 @@ def recognize_face():
         name, confidence = find_match(embedding)
         predictions.append({
             "userid": name,
-            "confidence": round(confidence * 100, 1),
+            "confidence": round(confidence, 4),
             "x_min": face["box"]["x_min"],
             "y_min": face["box"]["y_min"],
             "x_max": face["box"]["x_max"],
